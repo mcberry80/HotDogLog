@@ -3,6 +3,7 @@ import { auth, googleAuthProvider } from './firebase';
 import Login from './Login';
 import AddHotDog from './AddHotDog';
 import HotDogList from './HotDogList';
+import Standings from './Standings';
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <button className="btn btn-primary mb-4" onClick={signOut}>Sign Out</button>
           <AddHotDog user={user} />
           <HotDogList user={user} />
+          <Standings />
         </div>
       ) : (
         <Login signInWithGoogle={signInWithGoogle}  />
