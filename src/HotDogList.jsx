@@ -32,8 +32,8 @@ function HotDogList({ user }) {
         {hotdogs.map((hotdog) => (
           <li className="hotdog-item" key={hotdog.id}>
             <div className="hotdog-content">
-              <p className="hotdog-description">{hotdog.description}</p>
               <p className="hotdog-date">{hotdog.date}</p>
+              <p className="hotdog-notes">{hotdog.tastingNotes}</p>
               <p className="hotdog-user">@{hotdog.displayName}</p>
             </div>
             { (hotdog.uid == user.uid) && <button className="delete-button" onClick={() => handleDelete(hotdog.id)}>Delete</button> }

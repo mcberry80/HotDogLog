@@ -15,11 +15,16 @@
     flex: 1;
   }
   
-  .hotdog-text {
+  .hotdog-notes {
     margin-bottom: 5px;
     font-size: 16px;
   }
   
+  .hotdog-date {
+    font-size: 14px;
+    color: #888;
+  }
+
   .hotdog-user {
     font-size: 14px;
     color: #888;

@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 function Data({ user }) {
   const handleSubmit = (event) => {
     event.preventDefault();
-    const description = event.target.elements.message.value;
+    const tastingNotes = event.target.elements.notes.value;
     const date = event.target.elements.date.value;
-    if (date && description) {
+    if (date && tastingNotes) {
       firestore.collection('hotdogs').add({
         uid: user.uid,
         displayName: user.displayName,
         date: date,
-        description: description,
+        tastingNotes: tastingNotes,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
       event.target.reset();
@@ -25,7 +25,8 @@ function Data({ user }) {
       <form onSubmit={handleSubmit}>
         <label htmlFor="date">Date of hot dog:</label>
         <input type="date" name="date" />
-        <input type="text" name="description" placeholder="Describe the dog eating experience" />
+        <label htmlFor="description">Dog tasting notes:</label>
+        <input type="text" name="notes" />
         <button type="submit">Log Dog</button>
       </form>
     </div>
