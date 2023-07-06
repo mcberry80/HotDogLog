@@ -35,6 +35,7 @@ function HotDogList({ user }) {
               <p className="hotdog-date">{hotdog.date}</p>
               <p className="hotdog-notes">{hotdog.tastingNotes}</p>
               <p className="hotdog-user">@{hotdog.displayName}</p>
+              {hotdog.imageUrl && <img src={hotdog.imageUrl} alt="Hot Dog" style={{ maxWidth: 300 }} />}
             </div>
             { (hotdog.uid == user.uid) && <button className="delete-button" onClick={() => handleDelete(hotdog.id)}>Delete</button> }
           </li>
