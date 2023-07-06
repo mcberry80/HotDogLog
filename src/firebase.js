@@ -4,12 +4,13 @@ import 'firebase/compat/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCISZB8UfM4XpAdaLHZS-dVLwnaRAW7DZI",
-  authDomain: "userdata-ad96d.firebaseapp.com",
-  projectId: "userdata-ad96d",
-  storageBucket: "userdata-ad96d.appspot.com",
-  messagingSenderId: "1035408154540",
-  appId: "1:1035408154540:web:82e3516663d89c31436409"
+  apiKey: "AIzaSyAy2CVm4p3HuzQvuiah1GvYB6vLii0KY0A",
+  authDomain: "hotdoglog-4276e.firebaseapp.com",
+  projectId: "hotdoglog-4276e",
+  storageBucket: "hotdoglog-4276e.appspot.com",
+  messagingSenderId: "650559031715",
+  appId: "1:650559031715:web:1c0c8706ea00f3e6aeb216",
+  measurementId: "G-BYFH8W08WB"
 };
 
 // Initialize Firebase
@@ -20,4 +21,3 @@ const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 const firestore = firebase.firestore();
 
 export { firebase, auth, googleAuthProvider, firestore };
-

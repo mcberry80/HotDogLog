@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { auth, googleAuthProvider } from './firebase';
 import Login from './Login';
-import Data from './Data';
-import MessageList from './MessageList';
+import AddHotDog from './AddHotDog';
+import HotDogList from './HotDogList';
 import 'bootstrap/dist/css/bootstrap.css';
 
 function App() {
@@ -38,13 +38,13 @@ function App() {
 
   return (
     <div className="container">
-      <h1 className="mt-4 mb-4">My App</h1>
+      <h1 className="mt-4 mb-4">Hot Dog Log</h1>
       {user ? (
         <div>
           <p>Welcome, {user.displayName}</p>
           <button className="btn btn-primary mb-4" onClick={signOut}>Sign Out</button>
-          <Data user={user} />
-          <MessageList user={user} />
+          <AddHotDog user={user} />
+          <HotDogList user={user} />
         </div>
       ) : (
         <Login signInWithGoogle={signInWithGoogle}  />
