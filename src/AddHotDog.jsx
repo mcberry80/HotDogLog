@@ -1,49 +1,66 @@
-
 import { useState } from 'react';
-import { firebase, firestore, storage} from './firebase';
+import { firebase, firestore, storage } from './firebase';
 import PropTypes from 'prop-types';
 
-function Data({ user }) {
+function AddHotDog({ user }) {
   const [image, setImage] = useState(null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const tastingNotes = event.target.elements.notes.value;
     const date = event.target.elements.date.value;
-  
-    if (date && tastingNotes ) {
-      // Create a storage reference with a unique filename
-      const imageRef = storage.ref().child(`hotdog-images/${Date.now()}-${image.name}`);
-  
-      // Upload the image file to Firebase Storage
-      const uploadTask = imageRef.put(image);
-  
-      uploadTask.on(
-        'state_changed',
-        null,
-        (error) => {
-          console.log(error.message);
-        },
-        () => {
-          // Get the download URL of the uploaded image
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            // Save the hot dog entry in Firestore with the image URL
-            firestore.collection('hotdogs').add({
-              uid: user.uid,
-              displayName: user.displayName,
-              date: date,
-              tastingNotes: tastingNotes,
-              imageUrl: downloadURL,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+
+    if (date && tastingNotes) {
+      let imageUrl = '';
+
+      if (image) {
+        // Create a storage reference with a unique filename
+        const imageRef = storage.ref().child(`hotdog-images/${Date.now()}-${image.name}`);
+
+        // Upload the image file to Firebase Storage
+        const uploadTask = imageRef.put(image);
+
+        uploadTask.on(
+          'state_changed',
+          null,
+          (error) => {
+            console.log(error.message);
+          },
+          () => {
+            // Get the download URL of the uploaded image
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              imageUrl = downloadURL;
+              saveHotDogEntry(date, tastingNotes, imageUrl);
             });
-            event.target.reset();
-            setImage(null);
-          });
-        }
-      );
+          }
+        );
+      } else {
+        saveHotDogEntry(date, tastingNotes, imageUrl);
+      }
+
+      event.target.reset();
+      setImage(null);
     }
   };
-  
+
+  const saveHotDogEntry = (date, tastingNotes, imageUrl) => {
+    firestore
+      .collection('hotdogs')
+      .add({
+        uid: user.uid,
+        displayName: user.displayName,
+        date: date,
+        tastingNotes: tastingNotes,
+        imageUrl: imageUrl,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => {
+        console.log('Hot dog entry saved successfully');
+      })
+      .catch((error) => {
+        console.log('Error saving hot dog entry:', error.message);
+      });
+  };
 
   return (
     <div>
@@ -61,11 +78,11 @@ function Data({ user }) {
   );
 }
 
-Data.propTypes = {
+AddHotDog.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
     displayName: PropTypes.string.isRequired,
   }),
 };
 
-export default Data;
+export default AddHotDog;

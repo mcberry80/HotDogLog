@@ -36,7 +36,6 @@ function App() {
       });
   };
 
-
   return (
     <div className="container">
       <h1 className="mt-4 mb-4">Hot Dog Log</h1>
