@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { firebase, firestore, storage } from './firebase';
+import { firestore, storage } from './firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import PropTypes from 'prop-types';
 
 function AddHotDog({ user }) {
@@ -11,55 +13,29 @@ function AddHotDog({ user }) {
     const date = event.target.elements.date.value;
 
     if (date && tastingNotes) {
-      let imageUrl = '';
+      // Create a storage reference with a unique filename
+      const storageRef = ref(storage, `hotdog-images/${Date.now()}-${image.name}`);
 
-      if (image) {
-        // Create a storage reference with a unique filename
-        const imageRef = storage.ref().child(`hotdog-images/${Date.now()}-${image.name}`);
-
-        // Upload the image file to Firebase Storage
-        const uploadTask = imageRef.put(image);
-
-        uploadTask.on(
-          'state_changed',
-          null,
-          (error) => {
-            console.log(error.message);
-          },
-          () => {
-            // Get the download URL of the uploaded image
-            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-              imageUrl = downloadURL;
-              saveHotDogEntry(date, tastingNotes, imageUrl);
-            });
-          }
-        );
-      } else {
-        saveHotDogEntry(date, tastingNotes, imageUrl);
-      }
-
-      event.target.reset();
-      setImage(null);
-    }
-  };
-
-  const saveHotDogEntry = (date, tastingNotes, imageUrl) => {
-    firestore
-      .collection('hotdogs')
-      .add({
-        uid: user.uid,
-        displayName: user.displayName,
-        date: date,
-        tastingNotes: tastingNotes,
-        imageUrl: imageUrl,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then(() => {
-        console.log('Hot dog entry saved successfully');
-      })
-      .catch((error) => {
-        console.log('Error saving hot dog entry:', error.message);
+      // Upload the image file to Firebase Storage
+      uploadBytes(storageRef, image).then((snapshot) => {
+        // Get the download URL of the uploaded image
+        getDownloadURL(snapshot.ref).then((downloadURL) => {
+          // Save the hot dog entry in Firestore with the image URL
+          addDoc(collection(firestore, 'hotdogs'), {
+            uid: user.uid,
+            displayName: user.displayName,
+            date: date,
+            tastingNotes: tastingNotes,
+            imageUrl: downloadURL,
+            createdAt: serverTimestamp(),
+          });
+          event.target.reset();
+          setImage(null);
+        });
+      }).catch((error) => {
+        console.log(error.message);
       });
+    }
   };
 
   return (
@@ -71,7 +47,12 @@ function AddHotDog({ user }) {
         <label htmlFor="description">Dog tasting notes:</label>
         <input type="text" name="notes" />
         <label htmlFor="image">Hot Dog Image:</label>
-        <input type="file" name="image" onChange={(e) => setImage(e.target.files[0])} accept="image/*" />
+        <input
+          type="file"
+          name="image"
+          onChange={(e) => setImage(e.target.files[0])}
+          accept="image/*"
+        />
         <button type="submit">Log Dog</button>
       </form>
     </div>
