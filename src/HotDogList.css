@@ -2,43 +2,4 @@
     margin-top: 20px;
   }
   
-  .hotdog-item {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .hotdog-content {
-    flex: 1;
-  }
-  
-  .hotdog-notes {
-    margin-bottom: 5px;
-    font-size: 16px;
-  }
-  
-  .hotdog-date {
-    font-size: 14px;
-    color: #888;
-  }
-
-  .hotdog-user {
-    font-size: 14px;
-    color: #888;
-  }
-  
-  .delete-button {
-    background-color: transparent;
-    border: none;
-    color: #888;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .delete-button:hover {
-    color: red;
-  }
   
