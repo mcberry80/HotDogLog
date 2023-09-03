@@ -13,28 +13,39 @@ function AddHotDog({ user }) {
     const date = event.target.elements.date.value;
 
     if (date && tastingNotes) {
-      // Create a storage reference with a unique filename
-      const storageRef = ref(storage, `hotdog-images/${Date.now()}-${image.name}`);
+      if (image) {
+        // Create a storage reference with a unique filename
+        const storageRef = ref(storage, `hotdog-images/${Date.now()}-${image.name}`);
 
-      // Upload the image file to Firebase Storage
-      uploadBytes(storageRef, image).then((snapshot) => {
-        // Get the download URL of the uploaded image
-        getDownloadURL(snapshot.ref).then((downloadURL) => {
-          // Save the hot dog entry in Firestore with the image URL
-          addDoc(collection(firestore, 'hotdogs'), {
-            uid: user.uid,
-            displayName: user.displayName,
-            date: date,
-            tastingNotes: tastingNotes,
-            imageUrl: downloadURL,
-            createdAt: serverTimestamp(),
+        // Upload the image file to Firebase Storage
+        uploadBytes(storageRef, image).then((snapshot) => {
+          // Get the download URL of the uploaded image
+          getDownloadURL(snapshot.ref).then((downloadURL) => {
+            // Save the hot dog entry in Firestore with the image URL
+            addDoc(collection(firestore, 'hotdogs'), {
+              uid: user.uid,
+              displayName: user.displayName,
+              date: date,
+              tastingNotes: tastingNotes,
+              imageUrl: downloadURL,
+              createdAt: serverTimestamp(),
+            });
+            event.target.reset();
+            setImage(null);
           });
-          event.target.reset();
-          setImage(null);
+        }).catch((error) => {
+          console.log(error.message);
         });
-      }).catch((error) => {
-        console.log(error.message);
-      });
+      } else {
+        addDoc(collection(firestore, 'hotdogs'), {
+          uid: user.uid,
+          displayName: user.displayName,
+          date: date,
+          tastingNotes: tastingNotes,
+          imageUrl: "",
+          createdAt: serverTimestamp(),
+        });
+      }
     }
   };
 
