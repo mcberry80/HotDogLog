@@ -1,86 +1,129 @@
 import PropTypes from 'prop-types';
-import { getFirestore,  deleteDoc, doc, collection, getDoc, query, getDocs, where, setDoc} from 'firebase/firestore';
+import { useState, useEffect } from 'react';
+import { getFirestore, deleteDoc, doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firebaseApp } from './firebase';
 import './Reactions.css';
 
 const db = getFirestore(firebaseApp);
 
-const Reactions = ({hotdog, user}) => {
+const Reactions = ({ hotdog, user }) => {
 
-    const getUserReaction = async () => {
- 
-        const hotdogRef = doc(db, 'hotdogs', hotdog.id);
-        const reactionQuery = query(collection(hotdogRef, 'reactions'), where('uid', '==', user.uid));
-        const reactionSnapshot = await getDocs(reactionQuery);
-      
-        if (!reactionSnapshot.empty) {
-          const reactionDoc = reactionSnapshot.docs[0];
-          return reactionDoc.data().reactionType;
-        } else {
-          return null;
-        }
-    };
+    const [likes, setLikes] = useState(0);
+    const [dislikes, setDislikes] = useState(0);
+    const [userReaction, setUserReaction] = useState(null);
 
-    const handleReaction = async (reactionType) => {
-      
-        console.log(reactionType);
-        const hotdogRef = doc(db, 'hotdogs', hotdog.id);
+    useEffect(() => {
+        const fetchAndSetReactions = async () => {
+            const reactions = await fetchReactions(hotdog.id);
+            setLikes(reactions.likes);
+            setDislikes(reactions.dislikes);
+            const reaction = await getUserReaction(hotdog.id, user.uid);
+            setUserReaction(reaction);
+        };
+
+        fetchAndSetReactions();
+    }, [hotdog.id, user.uid]);
+
+    async function fetchReactions(hotdogId) {
+        const hotdogRef = doc(db, 'hotdogs', hotdogId);
         const reactionsRef = collection(hotdogRef, 'reactions');
-        const userReactionRef = doc(reactionsRef, `${hotdog.id}_${user.uid}`);
-        
-        const userReactionDoc = await getDoc(userReactionRef);
-      
-        if (userReactionDoc.exists()) {
-          const userReactionData = userReactionDoc.data();
-          await deleteDoc(userReactionRef);
-          if (userReactionData.reactionType === reactionType) {
-            return;
-          }
-        }
+        const reactionsSnapshot = await getDocs(reactionsRef);
 
-        const hotdogId = hotdog.id;
-        await setDoc(userReactionRef, {
-            hotdogId,
-            uid: user.uid,
-            reactionType,
+        let likes = 0;
+        let dislikes = 0;
+
+        reactionsSnapshot.forEach((doc) => {
+            const reaction = doc.data();
+            if (reaction.reactionType === 'like') likes++;
+            if (reaction.reactionType === 'dislike') dislikes++;
         });
 
+        return { likes, dislikes };
+    }
+
+    async function getUserReaction(hotdogId, userId) {
+        const hotdogRef = doc(db, 'hotdogs', hotdogId);
+        const reactionsRef = collection(hotdogRef, 'reactions');
+        const userReactionRef = doc(reactionsRef, `${hotdogId}_${userId}`);
+        const userReactionDoc = await getDoc(userReactionRef);
+
+        if (userReactionDoc.exists()) {
+            const userReactionData = userReactionDoc.data();
+            return userReactionData.reactionType;
+        } else {
+            return null;
+        }
+    }
+
+    const handleReaction = async (reactionType) => {
+        try {
+            console.log(`User clicked ${reactionType} for hotdog with id ${hotdog.id}`);
+            const hotdogRef = doc(db, 'hotdogs', hotdog.id);
+            const reactionsRef = collection(hotdogRef, 'reactions');
+            console.log(reactionsRef);
+            const userReactionRef = doc(reactionsRef, `${hotdog.id}_${user.uid}`);
+            const userReactionDoc = await getDoc(userReactionRef);
+
+            if (userReactionDoc.exists()) {
+                const userReactionData = userReactionDoc.data();
+                if (userReactionData.reactionType === reactionType) {
+                    await deleteDoc(userReactionRef);
+                    if (reactionType === 'like') {
+                        setLikes(likes - 1);
+                    } else {
+                        setDislikes(dislikes - 1);
+                    }
+                } else {
+                    await setDoc(userReactionRef, {
+                        hotdogId: hotdog.id,
+                        uid: user.uid,
+                        reactionType,
+                    });
+                    if (reactionType === 'like') {
+                        setLikes(likes + 1);
+                        if (userReactionData.reactionType === 'dislike') {
+                            setDislikes(dislikes - 1);
+                        }
+                    } else {
+                        setDislikes(dislikes + 1);
+                        if (userReactionData.reactionType === 'like') {
+                            setLikes(likes - 1);
+                        }
+                    }
+                }
+            } else {
+                await setDoc(userReactionRef, {
+                    hotdogId: hotdog.id,
+                    uid: user.uid,
+                    reactionType,
+                });
+                if (reactionType === 'like') {
+                    setLikes(likes + 1);
+                } else {
+                    setDislikes(dislikes + 1);
+                }
+            }
+        } catch (error) {
+            console.error('Error updating reaction: ', error);
+        }
     };
 
-    return(
+    return (
         <div className="reactions">
             <button
-            className={`reaction-button ${
-                user &&
-                hotdog.id &&
-                getUserReaction().then((reactionType) => reactionType === 'like')
-                ? 'liked'
-                : ''
-            }`}
-            onClick={() => handleReaction(hotdog.id, 'like')}
+                className={`reaction-button ${userReaction === 'like' ? 'liked' : ''}`}
+                onClick={() => handleReaction('like')}
             >
-            <span role="img" aria-label="Like">
-                🌭
-            </span>
-            <span className="reaction-count">0</span>
+                Like {likes}
             </button>
             <button
-            className={`reaction-button ${
-                user &&
-                hotdog.id &&
-                getUserReaction().then((reactionType) => reactionType === 'dislike')
-                ? 'disliked'
-                : ''
-            }`}
-            onClick={() => handleReaction('dislike')}
+                className={`reaction-button ${userReaction === 'dislike' ? 'disliked' : ''}`}
+                onClick={() => handleReaction('dislike')}
             >
-            <span role="img" aria-label="Dislike">
-                🤮
-            </span>
-            <span className="reaction-count">0</span>
+                Dislike {dislikes}
             </button>
         </div>
-    )
+    );
 }
 
 Reactions.propTypes = {
