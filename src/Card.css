@@ -1,46 +1,53 @@
 .hotdog-card {
-    border-radius: 5px;
-    border-color: black;
-    border-style: solid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  width: 40%;
+  padding: 20px;
+  margin: 20px auto;
+  background-color: #fff;
+}
+
+.hotdog-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
 .hotdog-item {
-    display: flex;
-    align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .hotdog-content {
-    flex: 1;
-  }
-  
-  .hotdog-notes {
-    margin-bottom: 5px;
-    font-size: 16px;
-  }
-  
-  .hotdog-date {
-    font-size: 14px;
-    color: #888;
-  }
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
 
-  .hotdog-user {
-    font-size: 14px;
-    color: #888;
-  }
-  
-  .delete-button {
-    background-color: transparent;
-    border: none;
-    color: #888;
-    font-size: 14px;
-    cursor: pointer;
-  }
-  
-  .delete-button:hover {
-    color: red;
-  }
-  
+.hotdog-content {
+  flex: 1;
+}
+
+.hotdog-notes {
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.hotdog-date, .hotdog-user {
+  font-size: 14px;
+  color: #888;
+}
+
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: red;
+}

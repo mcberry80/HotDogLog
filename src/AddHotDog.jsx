@@ -3,7 +3,7 @@ import { firestore, storage } from './firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import PropTypes from 'prop-types';
-
+import './AddHotDog.css';
 function AddHotDog({ user }) {
   const [image, setImage] = useState(null);
 
@@ -50,7 +50,7 @@ function AddHotDog({ user }) {
   };
 
   return (
-    <div>
+    <div className="add-hotdog-form">
       <h2>Add Hot Dog</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="date">Date of hot dog:</label>
