@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { firestore } from './firebase';
 import { collection, onSnapshot, query } from 'firebase/firestore';
+import './Standings.css';
 
 function Standings() {
   const [users, setUsers] = useState([]);
@@ -30,7 +31,7 @@ function Standings() {
   }, []);
 
   return (
-    <div>
+    <div className='standings'>
       <h2>Standings</h2>
       <ol>
         {users.map((user) => (
