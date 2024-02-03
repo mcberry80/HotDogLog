@@ -1,0 +1,23 @@
+.standings {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .standings table {
+    width: 100%;
+  }
+  
+  .standings th, .standings td {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .standings table, .standings th, .standings td {
+      font-size: 14px;
+    }
+  }
