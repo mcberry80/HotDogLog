@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import Reactions from '../reactions/Reactions';
 import { getFirestore,  deleteDoc, doc} from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
@@ -38,10 +37,6 @@ const Card = ({hotdog, user}) => {
     )
 }
 
-Card.propTypes = {
-    hotdog: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
-  };
 
 export default Card;
 

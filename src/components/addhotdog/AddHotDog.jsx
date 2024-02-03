@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { firestore, storage } from '../../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import PropTypes from 'prop-types';
 import './AddHotDog.css';
 function AddHotDog({ user }) {
   const [image, setImage] = useState(null);
@@ -70,11 +69,5 @@ function AddHotDog({ user }) {
   );
 }
 
-AddHotDog.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
-    displayName: PropTypes.string.isRequired,
-  }),
-};
 
 export default AddHotDog;

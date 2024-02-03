@@ -1,5 +1,6 @@
 
 import Root from './Routes/root';
+import User from './Routes/user';
 import * as React from 'react';
 
 import {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       path: "/",
       element: <Root />,
     },
+    {
+      path: "/user/:userId",
+      element: <User />,
+    }
   ]);
 
   createRoot(document.getElementById("root")).render(

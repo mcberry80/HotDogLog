@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { getFirestore, collection, query, orderBy, onSnapshot} from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
 import Card from '../card/Card';
@@ -38,8 +37,5 @@ function HotDogList({ user }) {
   );
 }
 
-HotDogList.propTypes = {
-  user: PropTypes.object.isRequired,
-};
 
 export default HotDogList;

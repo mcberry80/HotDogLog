@@ -1,5 +1,4 @@
 import  { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import './Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
@@ -55,11 +54,5 @@ function Login({user, setUser}) {
     );
   }
 }
-
-Login.propTypes = {
-  user: PropTypes.object,
-  setUser: PropTypes.func.isRequired,
-};
-
 
 export default Login;

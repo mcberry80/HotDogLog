@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { getFirestore, deleteDoc, doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
@@ -123,10 +122,5 @@ const Reactions = ({ hotdog, user }) => {
         </div>
     );
 }
-
-Reactions.propTypes = {
-    hotdog: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired
-};
 
 export default Reactions;
