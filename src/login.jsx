@@ -1,11 +1,25 @@
+import  { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import './Login.css';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
 function Login({user, setUser}) {
 
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    // Clean up subscription on unmount
+    return () => unsubscribe();
+  }, [auth, setUser]);
 
   const signOut = () => {
     auth.signOut()

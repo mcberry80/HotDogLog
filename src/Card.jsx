@@ -22,20 +22,18 @@ const Card = ({hotdog, user}) => {
 
     return (
         <div className="hotdog-card">
-            <div className="hotdog-content">
-                <p className="hotdog-date">{hotdog.date}</p>
-                <p className="hotdog-notes">{hotdog.tastingNotes}</p>
-                <p className="hotdog-user">@{hotdog.displayName}</p>
-                {hotdog.imageUrl && (
-                    <img src={hotdog.imageUrl} alt="Hot Dog" style={{ maxWidth: 300 }} />
-                )}
-                <Reactions hotdog={hotdog} user={user} />
-            </div>
-            {hotdog.uid === user.uid && (
-            <button className="delete-button" onClick={() => handleDelete(hotdog.id)}>
-                Delete
-            </button>
-            )}
+          <p className="hotdog-date">{hotdog.date}</p>
+          <p className="hotdog-notes">{hotdog.tastingNotes}</p>
+          <p className="hotdog-user">@{hotdog.displayName}</p>
+          {hotdog.imageUrl && (
+              <img src={hotdog.imageUrl} alt="Hot Dog" style={{ maxWidth: 300 }} />
+          )}
+          <Reactions hotdog={hotdog} user={user} />
+          {hotdog.uid === user.uid && (
+          <button className="delete-button" onClick={() => handleDelete(hotdog.id)}>
+              Delete
+          </button>
+          )}
         </div>
     )
 }

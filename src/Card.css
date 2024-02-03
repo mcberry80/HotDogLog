@@ -17,16 +17,6 @@
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
-.hotdog-item {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
-}
-
 .hotdog-content {
   flex: 1;
 }

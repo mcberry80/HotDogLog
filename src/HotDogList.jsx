@@ -29,11 +29,11 @@ function HotDogList({ user }) {
   return (
     <div className="hotdog-list">
       <h2>Hot Dogs</h2>
-      <ul>
+
         {hotdogs.map((hotdog) => (
           <Card key={hotdog.id} hotdog={hotdog} user={user} />
         ))}
-      </ul>
+
     </div>
   );
 }
