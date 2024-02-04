@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getFirestore, collection, query, orderBy, onSnapshot} from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
 import Card from '../card/Card';
+import AuthContext from '../../AuthContext';
 import './HotDogList.css';
 
 const db = getFirestore(firebaseApp);
 
-function HotDogList({ user }) {
+function HotDogList() {
   const [hotdogs, setHotdogs] = useState([]);
-  
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const hotdogsQuery = query(collection(db, 'hotdogs'), orderBy('createdAt', 'desc'));
@@ -30,7 +31,7 @@ function HotDogList({ user }) {
       <h2>Hot Dogs</h2>
 
         {hotdogs.map((hotdog) => (
-          <Card key={hotdog.id} hotdog={hotdog} user={user} />
+          <Card key={hotdog.id} hotdog={hotdog} />
         ))}
 
     </div>

@@ -1,12 +1,16 @@
 import Reactions from '../reactions/Reactions';
 import { getFirestore,  deleteDoc, doc} from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import AuthContext from '../../AuthContext';
 import './Card.css';
 const db = getFirestore(firebaseApp);
 
-const Card = ({hotdog, user}) => {
+const Card = ({hotdog}) => {
 
+    const { user } = useContext(AuthContext);
+    console.log(user)
     const handleDelete = (hotdogId) => {
 
         const hotdogRef = doc(db, 'hotdogs', hotdogId);
@@ -28,7 +32,7 @@ const Card = ({hotdog, user}) => {
           {hotdog.imageUrl && (
               <img src={hotdog.imageUrl} alt="Hot Dog" style={{ maxWidth: 300 }} />
           )}
-          <Reactions hotdog={hotdog} user={user} />
+          <Reactions hotdog={hotdog} />
           {hotdog.uid === user.uid && (
           <button className="delete-button" onClick={() => handleDelete(hotdog.id)}>
               Delete

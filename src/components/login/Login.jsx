@@ -1,9 +1,11 @@
-import  { useEffect } from 'react';
+import  { useEffect, useContext } from 'react';
+import AuthContext from '../../AuthContext';
 import './Login.css';
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
-function Login({user, setUser}) {
+function Login() {
 
+  const { user, setUser } = useContext(AuthContext);
   const provider = new GoogleAuthProvider();
   const auth = getAuth();
 

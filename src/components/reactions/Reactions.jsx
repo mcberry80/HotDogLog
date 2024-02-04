@@ -1,16 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { getFirestore, deleteDoc, doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
 import { firebaseApp } from '../../firebase';
+import  AuthContext  from '../../AuthContext';
 import './Reactions.css';
 
 const db = getFirestore(firebaseApp);
 
-const Reactions = ({ hotdog, user }) => {
+const Reactions = ({ hotdog }) => {
 
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
     const [userReaction, setUserReaction] = useState(null);
-
+    const { user } = useContext(AuthContext);
     useEffect(() => {
         const fetchAndSetReactions = async () => {
             const reactions = await fetchReactions(hotdog.id);

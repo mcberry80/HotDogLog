@@ -1,7 +1,9 @@
 
-import Root from './Routes/root';
-import User from './Routes/user';
+import Root from './routes/Root';
+import User from './routes/User';
+import AuthContext from './AuthContext';
 import * as React from 'react';
+import { useState } from 'react';
 
 import {
     createBrowserRouter,
@@ -20,8 +22,16 @@ const router = createBrowserRouter([
     }
   ]);
 
-  createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  );
+  const Main = () => {
+    const [user, setUser] = useState(null);
+
+    return (
+        <AuthContext.Provider value={{user, setUser}}>
+            <React.StrictMode>
+                <RouterProvider router={router} />
+            </React.StrictMode>
+        </AuthContext.Provider>
+    );
+}
+
+createRoot(document.getElementById("root")).render(<Main />);
